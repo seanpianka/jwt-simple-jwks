@@ -1,5 +1,5 @@
-use std::fmt::{Display, Formatter};
 use std::fmt;
+use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq)]
 pub struct Error {
@@ -14,8 +14,7 @@ impl Display for Error {
     }
 }
 
-impl std::error::Error for Error {
-}
+impl std::error::Error for Error {}
 
 /// Type of error encountered
 #[derive(Debug, PartialEq)]

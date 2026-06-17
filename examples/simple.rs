@@ -2,8 +2,8 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
-use jwks_client::Error;
-use jwks_client::KeyStore;
+use jwt_simple_jwks::Error;
+use jwt_simple_jwks::KeyStore;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
