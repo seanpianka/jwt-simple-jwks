@@ -1,5 +1,5 @@
-use std::{convert::TryFrom, convert::TryInto};
 use std::time::{Duration, SystemTime};
+use std::{convert::TryFrom, convert::TryInto};
 
 use base64::Engine;
 use jwt_simple::prelude::*;
@@ -65,9 +65,7 @@ impl JwtKey {
 
     pub fn decoding_key(&self) -> Result<RSAPublicKeyInputs, Error> {
         match &self.kind {
-            JwtKeyKind::RSA(key_inputs) => {
-                Ok(key_inputs.clone())
-            }
+            JwtKeyKind::RSA(key_inputs) => Ok(key_inputs.clone()),
             JwtKeyKind::UnsupportedKty(kty) => {
                 tracing::debug!("Unsupported key type: {}", kty);
                 Err(err("Unsupported key type", Type::Key))
@@ -245,17 +243,11 @@ impl KeyStore {
             JwtKeyKind::RSA(key_inputs) => {
                 let n = base64::engine::general_purpose::URL_SAFE_NO_PAD.decode(key_inputs.n.as_str()).map_err(|e| {
                     tracing::debug!("failed to decode n: {}", e);
-                    Error {
-                        msg: "failed to decode n",
-                        typ: Type::Key,
-                    }
+                    Error { msg: "failed to decode n", typ: Type::Key }
                 })?;
                 let e = base64::engine::general_purpose::URL_SAFE_NO_PAD.decode(key_inputs.e.as_str()).map_err(|e| {
                     tracing::debug!("failed to decode e: {}", e);
-                    Error {
-                        msg: "failed to decode e",
-                        typ: Type::Key,
-                    }
+                    Error { msg: "failed to decode e", typ: Type::Key }
                 })?;
                 let alg = if let Some(alg) = &key.alg {
                     alg
@@ -297,15 +289,13 @@ impl KeyStore {
                         })?;
                         Ok(data)
                     }
-                    _ => {
-                        Err(err("Unsupported algorithm", Type::Key))
-                    }
+                    _ => Err(err("Unsupported algorithm", Type::Key)),
                 }
             }
             JwtKeyKind::UnsupportedKty(kty) => {
                 tracing::error!("Unsupported key type: {}", kty);
                 Err(err("Unsupported key type", Type::Key))
-            },
+            }
         }?;
         Ok(data)
     }
